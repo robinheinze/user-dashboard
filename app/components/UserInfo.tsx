@@ -1,13 +1,27 @@
 import React, { useContext } from "react"
-import { Image, Text, View } from "react-native"
+import { Image, ImageStyle, Text, View, ViewStyle } from "react-native"
 import { UserContext } from "../app"
+import { spacing } from "../theme"
 
-export const UserInfo = () => {
+const $containerStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  padding: spacing[2],
+} as ViewStyle
+
+const $imageStyle = {
+  height: 40,
+  width: 40,
+  borderRadius: 20,
+  marginRight: spacing[2],
+} as ImageStyle
+
+export function UserInfo(props: { name: string; avatarUrl: string }) {
   const user = useContext(UserContext)
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Image style={{ height: 40, width: 40 }} source={{ uri: user.avatarUrl }} />
+    <View style={$containerStyle}>
+      <Image style={$imageStyle} source={{ uri: props.avatarUrl }} />
       <Text>{user.name}</Text>
     </View>
   )

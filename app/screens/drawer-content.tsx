@@ -1,13 +1,21 @@
 import React from "react"
-import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"
+import {
+  DrawerContentComponentProps,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer"
 
 import { UserInfo } from "../components/UserInfo"
 
-export function CustomDrawerContent(props) {
+interface CustomDrawerContentProps extends DrawerContentComponentProps {
+  user: { name: string; avatarUrl: string }
+}
+
+export function CustomDrawerContent({ user, ...rest }: CustomDrawerContentProps) {
   return (
-    <DrawerContentScrollView {...props}>
-      <UserInfo />
-      <DrawerItemList {...props} />
+    <DrawerContentScrollView {...rest}>
+      <UserInfo name={user.name} avatarUrl={user.avatarUrl} />
+      <DrawerItemList {...rest} />
     </DrawerContentScrollView>
   )
 }

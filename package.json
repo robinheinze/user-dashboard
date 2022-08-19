@@ -131,6 +131,9 @@
       }
     }
   },
+  "resolutions": {
+    "@types/react": "17.0.37"
+  },
   "eslintConfig": {
     "root": true,
     "parser": "@typescript-eslint/parser",
@@ -193,7 +196,8 @@
       "react-native/no-raw-text": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
-      "space-before-function-paren": 0
+      "space-before-function-paren": 0,
+      "react/display-name": 0
     }
   }
 }

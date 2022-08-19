@@ -31,17 +31,21 @@ export const UserContext = React.createContext(undefined)
  */
 function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
-  const [name, setName] = useState<string>("Robin")
-  const [avatarUrl, setAvatarUrl] = useState<string>(
-    "https://avatars.githubusercontent.com/u/6894653?s=40&v=4",
-  )
+  // const [name, setName] = useState<string>("Robin")
+  // const [avatarUrl, setAvatarUrl] = useState<string>(
+  //   "https://avatars.githubusercontent.com/u/6894653?s=40&v=4",
+  // )
 
-  const user = useMemo(() => ({ name, avatarUrl, setName, setAvatarUrl }), [
-    name,
-    avatarUrl,
-    setName,
-    setAvatarUrl,
-  ])
+  // const user = useMemo(() => ({ name, avatarUrl, setName, setAvatarUrl }), [
+  //   name,
+  //   avatarUrl,
+  //   setName,
+  //   setAvatarUrl,
+  // ])
+  const user: { name: string; avatarUrl: string } = {
+    name: "Robin",
+    avatarUrl: "https://avatars.githubusercontent.com/u/6894653?s=40&v=4",
+  }
 
   const {
     initialNavigationState,
@@ -72,6 +76,7 @@ function App() {
         <AppNavigator
           initialState={initialNavigationState}
           onStateChange={onNavigationStateChange}
+          user={user}
         />
       </UserContext.Provider>
     </SafeAreaProvider>

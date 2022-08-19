@@ -5,13 +5,13 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme, View } from "react-native"
+import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
-import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer"
+import { createDrawerNavigator } from "@react-navigation/drawer"
 import { CustomDrawerContent } from "../screens/drawer-content"
+import { UserInfo } from "../components/UserInfo"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -36,10 +36,17 @@ export type NavigatorParamList = {
 // const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Drawer = createDrawerNavigator()
 
-const AppStack = () => {
+const AppStack = ({ user }) => {
   return (
-    <Drawer.Navigator initialRouteName="welcome" drawerContent={CustomDrawerContent}>
-      <Drawer.Screen name="welcome" component={WelcomeScreen} />
+    <Drawer.Navigator
+      initialRouteName="welcome"
+      drawerContent={(props) => <CustomDrawerContent user={user} {...props} />}
+    >
+      <Drawer.Screen
+        name="welcome"
+        component={WelcomeScreen}
+        options={{ headerRight: () => <UserInfo name={user.name} avatarUrl={user.avatarUrl} /> }}
+      />
       <Drawer.Screen name="demo" component={DemoScreen} />
       <Drawer.Screen name="demoList" component={DemoListScreen} />
       {/** 🔥 Your screens go here */}
@@ -47,7 +54,9 @@ const AppStack = () => {
   )
 }
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {
+  user: { name: string; avatarUrl: string }
+}
 
 export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
@@ -58,7 +67,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
+      <AppStack user={props.user} />
     </NavigationContainer>
   )
 }

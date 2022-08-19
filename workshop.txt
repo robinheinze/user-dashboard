@@ -1,3 +1,4 @@
+/*
 npx ignite new UserDashboard
 
 lock expo-linear-gradient version
@@ -7,11 +8,16 @@ yarn add @react-navigation/drawer react-native-reanimated
 babel.config.js
 ['react-native-reanimated/plugin'],
 
+react/display-name: 0
+
 yarn start --reset-cache
 
 yarn ios
+*/
 
 const Drawer = createDrawerNavigator()
+
+/*
 
 change Stack to Drawer in app-navigator
 
@@ -19,22 +25,41 @@ Remove headerShown: false,
 
 Remove content from welcome screen
 
-Create DrawerContent, UserInfo
+add user data to app.tsx
+
+*/
+
+const user: { name: string, avatarUrl: string } = {
+  name: "Robin",
+  avatarUrl: "https://avatars.githubusercontent.com/u/6894653?s=40&v=4",
+}
+
+/*
+Create CustomDrawerContent, UserInfo
 
 add CustomDrawerContent to navigator
 
-add ProfileForm and UserInfo to welcome screen
+add user info to headerRight in drawer navigator
+
+add ProfileForm to welcome screen
+
+ - no way to update the user info without adding a callback drilled down
+ - Want to avoid all the prop drilling
 
 add user context to app.tsx
+*/
 
 const UserContext = React.createContext({})
 
-const [name, setName] = useState<string>("Robin")
-const [avatarUrl, setAvatarUrl] = useState<string>("https://avatars.githubusercontent.com/u/6894653?s=40&v=4")
+const [name, setName] = useState < string > "Robin"
+const [avatarUrl, setAvatarUrl] =
+  useState < string > "https://avatars.githubusercontent.com/u/6894653?s=40&v=4"
 
-const user = useMemo(() => ({ name, avatarUrl }), [name, avatarUrl])
+const user = useMemo(() => ({ name, avatarUrl, setName, setAvatarUrl }), [
+  name,
+  avatarUrl,
+  setName,
+  setAvatarUrl,
+])
 
-bring in context into userinfo
-
-add setName
-
+// bring in context into userinfo, drawer content, remove extra props
