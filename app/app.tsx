@@ -11,14 +11,12 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
-import { RootStore, RootStoreProvider, setupRootStore } from "./models"
-import { ToggleStorybook } from "../storybook/toggle-storybook"
-import { ErrorBoundary } from "./screens/error/error-boundary"
+import { RootStore, setupRootStore } from "./models"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -26,11 +24,25 @@ import { ErrorBoundary } from "./screens/error/error-boundary"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
+export const UserContext = React.createContext(undefined)
+
 /**
  * This is the root component of our app.
  */
 function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+  const [name, setName] = useState<string>("Robin")
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    "https://avatars.githubusercontent.com/u/6894653?s=40&v=4",
+  )
+
+  const user = useMemo(() => ({ name, avatarUrl, setName, setAvatarUrl }), [
+    name,
+    avatarUrl,
+    setName,
+    setAvatarUrl,
+  ])
+
   const {
     initialNavigationState,
     onNavigationStateChange,
@@ -55,18 +67,14 @@ function App() {
 
   // otherwise, we're ready to render the app
   return (
-    <ToggleStorybook>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <ErrorBoundary catchErrors={"always"}>
-            <AppNavigator
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </ErrorBoundary>
-        </SafeAreaProvider>
-      </RootStoreProvider>
-    </ToggleStorybook>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <UserContext.Provider value={user}>
+        <AppNavigator
+          initialState={initialNavigationState}
+          onStateChange={onNavigationStateChange}
+        />
+      </UserContext.Provider>
+    </SafeAreaProvider>
   )
 }
 

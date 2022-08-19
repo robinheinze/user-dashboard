@@ -5,11 +5,13 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme } from "react-native"
+import { useColorScheme, View } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer"
+import { CustomDrawerContent } from "../screens/drawer-content"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -31,21 +33,17 @@ export type NavigatorParamList = {
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<NavigatorParamList>()
+// const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Drawer = createDrawerNavigator()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="welcome"
-    >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
+    <Drawer.Navigator initialRouteName="welcome" drawerContent={CustomDrawerContent}>
+      <Drawer.Screen name="welcome" component={WelcomeScreen} />
+      <Drawer.Screen name="demo" component={DemoScreen} />
+      <Drawer.Screen name="demoList" component={DemoListScreen} />
       {/** 🔥 Your screens go here */}
-    </Stack.Navigator>
+    </Drawer.Navigator>
   )
 }
 
